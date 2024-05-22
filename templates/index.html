@@ -2,26 +2,93 @@
 <html>
 <head>
     <title>Sentiment Analyzer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(45deg, #3b8d99, #6b6b83, #aa4b6b);
+        }
+        h1 {
+            color: #fff;
+            text-shadow: 1px 1px 2px #000;
+        }
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            background: #3b8d99;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button:hover {
+            background: #2a6a70;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            /* border: 1px solid #ddd; */
+            /* background-color: #f9f9f9;   */
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
-    <h1>Sentiment Analyzer App</h1>
-    <form action="/analyze" method="post">
-        <label for="text">Enter Text:</label>
-        <input type="text" id="text" name="text" required>
-        <button type="submit">Analyze</button>
-    </form>
-    <div id="result"></div>
+    <div>
+        <h1>Sentiment Analyzer App</h1>
+        <form action="/analyze" method="post">
+            <label for="text">Enter Text:</label>
+            <input type="text" id="text" name="text" required>
+            <button type="submit">Analyze</button>
+        </form>
+        <div id="result"></div>
+    </div>
     <script>
         const form = document.querySelector('form');
         form.onsubmit = async (event) => {
             event.preventDefault();
             const formData = new FormData(form);
+            document.getElementById('result').innerText = 'Analyzing...';
             const response = await fetch('/analyze', {
                 method: 'POST',
                 body: formData
             });
             const result = await response.json();
-            document.getElementById('result').innerText = `Sentiment: ${result.sentiment}`;
+            document.getElementById('result').innerHTML = `
+                <p>Input: ${result.input}</p>
+                <p>Sentiment: ${result.sentiment}</p>
+                <p>Scores: Negative: ${result.scores[0].toFixed(3)}, Neutral: ${result.scores[1].toFixed(3)}, Positive: ${result.scores[2].toFixed(3)}</p>
+            `;
         }
     </script>
 </body>
