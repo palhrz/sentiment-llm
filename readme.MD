@@ -1,5 +1,5 @@
 .env
-OPEN_AI_KEY=
+OPENAI_API_KEY=
 
 Install dependencies
 ```bash
